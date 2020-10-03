@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, ImageBackground, ToastAndroid } from 'react-native';
+import { View, StyleSheet, ImageBackground, ToastAndroid, Alert } from 'react-native';
 import { Avatar, Button, Card, List, Text } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
@@ -29,6 +29,7 @@ export default class Cards extends React.Component {
     let data = await AsyncStorage.getItem('data')
     if (data) {
       let data1 = JSON.parse(data)
+      //console.log("Home", this.state.data);
       this.setState({
         data: data1,
       })
@@ -40,7 +41,7 @@ export default class Cards extends React.Component {
       Navigate to DetailScreen and pass data's id as param
     */
     this.props.navigation.navigate('Detail',{
-      id: id
+      id: id,
     })
 
   };
@@ -58,9 +59,8 @@ export default class Cards extends React.Component {
   }
 
   render() {
-    console.log("DATA", this.state.data);
     return (
-      <>
+     <>
         <NavigationEvents
           onWillFocus={this.fetchData}
         />

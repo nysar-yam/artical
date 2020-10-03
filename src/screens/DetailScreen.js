@@ -6,9 +6,14 @@ import { NavigationEvents } from 'react-navigation';
 import { HeartIcon, MessageCircleIcon } from '../icons';
 
 export default class DetailScreen extends Component {
-  static navigationOptions = {
+  /**
+   * 
+   * @param {navigation} param exstend navigation on property
+   * 
+   */
+  static navigationOptions = ({ navigation }) => ({
     title: 'Details',
-  };
+  });
 
   constructor(props) {
     super(props);
@@ -28,11 +33,27 @@ export default class DetailScreen extends Component {
       Get data from asyncStorage and set it to state component
       Find matching item and set it to state component
     */
-    let data = await AsyncStorage.getItem('data')
+
+    /**
+     * loop data form json
+     */
+    let data = await AsyncStorage.getItem("data")
     if (data) {
-      let data1 = JSON.parse(data)
+      let data1 = JSON.parse(data);
+      let item_id = this.props.navigation.state.params.id;
+      console.log(item_id);
+      /**
+       * declear new object and push data to value
+       */
+      let a_json = [];
+      data1.forEach(function(value, index){
+        if(value.id == item_id){
+          a_json.push(value);
+        }
+      });
+      //** edit on setState */
       this.setState({
-        data: data1,
+        data: a_json,
       })
     }
   }
@@ -50,14 +71,14 @@ export default class DetailScreen extends Component {
   }
 
   render() {
-    const { item } = this.state;
-    if (item) {
+    /** 
+     * access to object article
+     */
+    const item = this.state;
+    if (item.data != null) {
+      let article = item.data[0];
       return (
-        
         <Layout style={styles.container}>
-
-
-          <Text>Hello World</Text>
           <NavigationEvents
             onWillFocus={this.fetchData}
             data={this.state.data}
@@ -66,7 +87,7 @@ export default class DetailScreen extends Component {
           
           <ImageBackground
             style={styles.headerContainer}
-            source={{ uri: this.state.image }}
+            source={{ uri: article.image }}
           >
             <View style={[
               StyleSheet.absoluteFill,
@@ -76,22 +97,22 @@ export default class DetailScreen extends Component {
               style={styles.headerTitle}
               category='h1'
               status='control'>
-              {this.state.title}
+              {article.title}
             </Text>
           </ImageBackground>
           <Layout
             style={styles.contentContainer}
             level='1'>
             <Text>
-              {this.data.content}
+              {article.content}
             </Text>
           </Layout>
           <Divider />
           <View style={styles.activityContainer}>
-            <Avatar source={{ uri: this.state.avatar }} />
+            <Avatar source={{ uri: article.avatar }} />
             <View style={styles.authoringInfoContainer}>
               <Text>
-                {this.data.name}
+                {article.title}
               </Text>
               <Text
                 appearance='hint'
