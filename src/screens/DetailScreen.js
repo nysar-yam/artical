@@ -10,6 +10,15 @@ export default class DetailScreen extends Component {
     title: 'Details',
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null,
+      item: null,
+    };
+  }
+
+
   async componentDidMount() {
     this.fetchData()
   }
@@ -19,6 +28,13 @@ export default class DetailScreen extends Component {
       Get data from asyncStorage and set it to state component
       Find matching item and set it to state component
     */
+    let data = await AsyncStorage.getItem('data')
+    if (data) {
+      let data1 = JSON.parse(data)
+      this.setState({
+        data: data1,
+      })
+    }
   }
 
   onLike = (item) => {
@@ -37,13 +53,20 @@ export default class DetailScreen extends Component {
     const { item } = this.state;
     if (item) {
       return (
+        
         <Layout style={styles.container}>
+
+
+          <Text>Hello World</Text>
           <NavigationEvents
             onWillFocus={this.fetchData}
+            data={this.state.data}
+            renderItem={this.renderItem}
           />
+          
           <ImageBackground
             style={styles.headerContainer}
-            source={{ uri: '' }}
+            source={{ uri: this.state.image }}
           >
             <View style={[
               StyleSheet.absoluteFill,
@@ -53,28 +76,28 @@ export default class DetailScreen extends Component {
               style={styles.headerTitle}
               category='h1'
               status='control'>
-              title
-              </Text>
+              {this.state.title}
+            </Text>
           </ImageBackground>
           <Layout
             style={styles.contentContainer}
             level='1'>
             <Text>
-              content
-              </Text>
+              {this.data.content}
+            </Text>
           </Layout>
           <Divider />
           <View style={styles.activityContainer}>
-            <Avatar source={{ uri: '' }} />
+            <Avatar source={{ uri: this.state.avatar }} />
             <View style={styles.authoringInfoContainer}>
               <Text>
-                name
-                </Text>
+                {this.data.name}
+              </Text>
               <Text
                 appearance='hint'
                 category='p2'>
-                date
-                </Text>
+                {this.state.date}
+              </Text>
             </View>
             <Button
               style={styles.iconButton}
@@ -97,8 +120,6 @@ export default class DetailScreen extends Component {
     return null;
   }
 }
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
