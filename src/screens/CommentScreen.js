@@ -39,7 +39,7 @@ export default class CommentScreen extends Component {
     /*
       - Update state variables and data local storage
     */
-
+s
   }
 
   render() {

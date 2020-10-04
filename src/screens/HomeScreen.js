@@ -16,6 +16,9 @@ export default class Cards extends React.Component {
     this.state = {
       data: null,
     };
+    this.state = {isToggleOn:true}
+    this.onLike = this.onLike.bind(this);
+    // console.log(likes);
   }
 
   componentDidMount() {
@@ -40,16 +43,20 @@ export default class Cards extends React.Component {
     /*
       Navigate to DetailScreen and pass data's id as param
     */
-    this.props.navigation.navigate('Detail',{
+    this.props.navigation.navigate('Detail', {
       id: id,
     })
 
   };
-
+   // Dislike and like
   onLike = (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
+   this.setState(prevState => ({
+    isToggleOn: !prevState.isToggleOn
+  }));
+
   }
 
   onComment = (item) => {
@@ -60,7 +67,7 @@ export default class Cards extends React.Component {
 
   render() {
     return (
-     <>
+      <>
         <NavigationEvents
           onWillFocus={this.fetchData}
         />
@@ -82,13 +89,13 @@ export default class Cards extends React.Component {
       onPress={() => this.onItemPress(item.id)}>
       <Text category='h5'>
         {item.title}
-      </Text> 
-      <Text 
+      </Text>
+      <Text
         style={styles.itemContent}
         appearance='hint'
         category='s1'>
-       {item.content}
-      </Text>
+        {item.content}
+      </Text>
     </Card>
   );
 
@@ -98,13 +105,13 @@ export default class Cards extends React.Component {
       <View style={styles.itemAuthoringContainer}>
         <Text
           category='s2'>
-         {item.name}
-        </Text>
+          {item.name}
+        </Text>
         <Text
           appearance='hint'
           category='c1'>
           {item.date}
-        </Text>
+        </Text>
       </View>
       <Button
         style={styles.iconButton}
@@ -113,14 +120,16 @@ export default class Cards extends React.Component {
         accessoryLeft={MessageCircleIcon}>
         0
       </Button>
+
       <Button
+        onPress={this.onLike}
         style={styles.iconButton}
         appearance='ghost'
-        status={item.likes ? 'danger' : 'basic'}
+        status={this.state.isToggleOn ? 'danger' : 'basic'}
         accessoryLeft={HeartIcon} />
     </View>
   );
-  
+
   renderItemHeader = (item) => {
     return (
       <ImageBackground
@@ -159,5 +168,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 16,
-  },
+  }
 });
