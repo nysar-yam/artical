@@ -8,11 +8,33 @@ export default class CommentScreen extends Component {
     title: 'Comments',
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null,
+      item: null,
+      comment : null,
+      error: null,
+    };
+  }
+
+  onItemPress = (id) => {
+    /*
+      Navigate to DetailScreen and pass data's id as param
+    */
+    this.props.navigation.navigate('Comment', {
+      id: id,
+    }) 
+
+  };
+
+
   async componentDidMount() {
     /*
       - Get data from asyncStorage and set it to state component
       - Getting item from navigation params and set it to state component
     */
+   this.fetchData()
   }
 
   renderItem = ({ item }) => (
@@ -30,16 +52,15 @@ export default class CommentScreen extends Component {
       - If comment is empty show error and not allow to post comment
     */
 
-    //let newArray = [...this.state.data]
-    //let foundIndex = data.findIndex(e => e.id === item.id)
-    //let foundItem = data.find(e => e.id === item.id)
-    //newArray[foundIndex] = {...newArray[foundIndex], comments: [comment, ...newArray[foundIndex]['comments']]}
-    //foundItem.comments.unshift(comment)
+    // let newArray = [...this.state.data]
+    // let foundIndex = data.findIndex(e => e.id === item.id)
+    // let foundItem = data.find(e => e.id === item.id)
+    // newArray[foundIndex] = {...newArray[foundIndex], comments: [comment, ...newArray[foundIndex]['comments']]}
+    // foundItem.comments.unshift(comment)
 
     /*
       - Update state variables and data local storage
     */
-s
   }
 
   render() {

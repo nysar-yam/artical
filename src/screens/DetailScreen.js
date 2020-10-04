@@ -21,6 +21,8 @@ export default class DetailScreen extends Component {
       data: null,
       item: null,
     };
+    this.state = { isToggleOn: true }
+    this.onLike = this.onLike.bind(this);
   }
 
 
@@ -46,8 +48,8 @@ export default class DetailScreen extends Component {
        * declear new object and push data to value
        */
       let a_json = [];
-      data1.forEach(function(value, index){
-        if(value.id == item_id){
+      data1.forEach(function (value, index) {
+        if (value.id == item_id) {
           a_json.push(value);
         }
       });
@@ -58,10 +60,15 @@ export default class DetailScreen extends Component {
     }
   }
 
+  // like and dislike on icon heart
   onLike = (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+
   }
 
   onComment = (item) => {
@@ -84,7 +91,7 @@ export default class DetailScreen extends Component {
             data={this.state.data}
             renderItem={this.renderItem}
           />
-          
+
           <ImageBackground
             style={styles.headerContainer}
             source={{ uri: article.image }}
@@ -128,11 +135,11 @@ export default class DetailScreen extends Component {
               0
                 </Button>
             <Button
+              onPress={this.onLike}
               style={styles.iconButton}
               appearance='ghost'
-              status={true ? 'danger' : 'basic'}
-              accessoryLeft={HeartIcon}
-            />
+              status={this.state.isToggleOn ? 'danger' : 'basic'}
+              accessoryLeft={HeartIcon} />
           </View>
         </Layout>
       );

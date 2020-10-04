@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
 import { HeartIcon, MessageCircleIcon } from '../icons';
 import sampleData from '../data.json';
+import { TextInput } from 'react-native-gesture-handler';
 
 export default class Cards extends React.Component {
   static navigationOptions = {
@@ -16,7 +17,7 @@ export default class Cards extends React.Component {
     this.state = {
       data: null,
     };
-    this.state = {isToggleOn:true}
+    this.state = { isToggleOn: true }
     this.onLike = this.onLike.bind(this);
     // console.log(likes);
   }
@@ -45,17 +46,17 @@ export default class Cards extends React.Component {
     */
     this.props.navigation.navigate('Detail', {
       id: id,
-    })
+    });
 
   };
-   // Dislike and like
+  // Dislike and like
   onLike = (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
-   this.setState(prevState => ({
-    isToggleOn: !prevState.isToggleOn
-  }));
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
 
   }
 
@@ -63,9 +64,14 @@ export default class Cards extends React.Component {
     /*
       Navigate to CommentScreen and pass item as param
     */
+    this.props.navigation.navigate('Comment', {
+      id: id,
+    });
   }
 
   render() {
+    // var str = item.content;
+    // if(str.length > 10) str = str.substring(0,10);
     return (
       <>
         <NavigationEvents
@@ -90,7 +96,7 @@ export default class Cards extends React.Component {
       <Text category='h5'>
         {item.title}
       </Text>
-      <Text
+      <Text numberOfLines={5} style={{width:85}}
         style={styles.itemContent}
         appearance='hint'
         category='s1'>
@@ -113,12 +119,14 @@ export default class Cards extends React.Component {
           {item.date}
         </Text>
       </View>
+
       <Button
+        onPress={this.onLike}
         style={styles.iconButton}
         appearance='ghost'
         status='basic'
         accessoryLeft={MessageCircleIcon}>
-        0
+        1234567
       </Button>
 
       <Button
@@ -131,6 +139,7 @@ export default class Cards extends React.Component {
   );
 
   renderItemHeader = (item) => {
+
     return (
       <ImageBackground
         style={styles.itemHeader}
@@ -168,5 +177,5 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     marginHorizontal: 16,
-  }
+  },
 });
