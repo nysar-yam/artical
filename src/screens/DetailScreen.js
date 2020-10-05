@@ -75,6 +75,7 @@ export default class DetailScreen extends Component {
     /*
       Navigate to CommentScreen and pass item as param
     */
+   this.props.navigation.navigate('Comment');
   }
 
   render() {
@@ -128,6 +129,7 @@ export default class DetailScreen extends Component {
               </Text>
             </View>
             <Button
+               onPress= {this.onComment}
               style={styles.iconButton}
               appearance='ghost'
               status='basic'

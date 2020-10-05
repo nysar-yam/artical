@@ -18,17 +18,6 @@ export default class CommentScreen extends Component {
     };
   }
 
-  onItemPress = (id) => {
-    /*
-      Navigate to DetailScreen and pass data's id as param
-    */
-    this.props.navigation.navigate('Comment', {
-      id: id,
-    }) 
-
-  };
-
-
   async componentDidMount() {
     /*
       - Get data from asyncStorage and set it to state component
@@ -42,12 +31,20 @@ export default class CommentScreen extends Component {
   );
 
   renderIcon = (props) => (
-    <TouchableWithoutFeedback onPress={this.onComment}>
+    <TouchableWithoutFeedback
+    //  onPress={this.onComment}
+    onPress = {
+      ()=> this.login(this.state.comment)
+    }
+
+    >
       <Icon {...props} name={'paper-plane-outline'} />
     </TouchableWithoutFeedback>
   );
 
-  onComment = () => {
+  onComment = (Input) => {
+    this.setState({comment: Input})
+
     /*
       - If comment is empty show error and not allow to post comment
     */
@@ -63,9 +60,13 @@ export default class CommentScreen extends Component {
     */
   }
 
+  login = (comment)=>{
+    alert('comment: ' + comment);
+  }
+
   render() {
     const { item, comment, error } = this.state;
-    if (item) {
+    // if (item) {
       return (
         <Layout style={styles.container}>
           { error && <Text style={styles.text} status='danger'>Comment cannot be empty!</Text>}
@@ -76,15 +77,17 @@ export default class CommentScreen extends Component {
             ListEmptyComponent={() => <Text>There are no any comments.</Text>}
           />
           <Input
+            // onChangeText={this.onComment}
             value={comment}
             placeholder='Add comment'
             accessoryRight={this.renderIcon}
             onChangeText={nextValue => this.setState({ comment: nextValue, error: false })}
+            
           />
         </Layout>
       );
-    }
-    return null;
+    // }
+    // return null;
   }
 }
 

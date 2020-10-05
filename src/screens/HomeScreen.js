@@ -49,7 +49,10 @@ export default class Cards extends React.Component {
     });
 
   };
-  // Dislike and like
+ /**
+  * Dislike and like
+  * @param {prevState} item 
+  */
   onLike = (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
@@ -59,19 +62,18 @@ export default class Cards extends React.Component {
     }));
 
   }
-
+   /**
+    * Link to page comment
+    * @param {item} item 
+    */
   onComment = (item) => {
     /*
       Navigate to CommentScreen and pass item as param
     */
-    this.props.navigation.navigate('Comment', {
-      id: id,
-    });
+    this.props.navigation.navigate('Comment');
   }
 
   render() {
-    // var str = item.content;
-    // if(str.length > 10) str = str.substring(0,10);
     return (
       <>
         <NavigationEvents
@@ -86,7 +88,11 @@ export default class Cards extends React.Component {
       </>
     );
   }
-
+/**
+ * 
+ * @param {*} param0 
+ * hide the content of text
+ */
   renderItem = ({ item }) => (
     <Card
       style={styles.item}
@@ -107,7 +113,7 @@ export default class Cards extends React.Component {
 
   renderItemFooter = (item) => (
     <View style={styles.itemFooter}>
-      <Avatar source={{ uri: item.image }} />
+      <Avatar source={{ uri: item.avatar}} />
       <View style={styles.itemAuthoringContainer}>
         <Text
           category='s2'>
@@ -119,9 +125,9 @@ export default class Cards extends React.Component {
           {item.date}
         </Text>
       </View>
-
+      {/* link to page comment */}
       <Button
-        onPress={this.onLike}
+       onPress= {this.onComment}
         style={styles.iconButton}
         appearance='ghost'
         status='basic'
@@ -143,7 +149,7 @@ export default class Cards extends React.Component {
     return (
       <ImageBackground
         style={styles.itemHeader}
-        source={{ uri: item.avatar }}
+        source={{ uri: item.image}}
       />
     );
   };
