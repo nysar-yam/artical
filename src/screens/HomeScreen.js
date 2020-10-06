@@ -18,8 +18,9 @@ export default class Cards extends React.Component {
       data: null,
     };
     this.state = { isToggleOn: true }
-    this.onLike = this.onLike.bind(this);
+    // this.onLike = this.onLike.bind(this);
     // console.log(likes);
+
   }
 
   componentDidMount() {
@@ -33,10 +34,9 @@ export default class Cards extends React.Component {
     let data = await AsyncStorage.getItem('data')
     if (data) {
       let data1 = JSON.parse(data)
-      //console.log("Home", this.state.data);
       this.setState({
         data: data1,
-      })
+      });
     }
   }
 
@@ -53,13 +53,31 @@ export default class Cards extends React.Component {
   * Dislike and like
   * @param {prevState} item 
   */
-  onLike = (item) => {
+  onLike = async (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }));
+   const {data} = this.state;
+
+  //  let data = await AsyncStorage.setItem("data")
+      let newData = data.map((element, index) => {
+        if(element.id === item.id){
+           element.likes = !element.likes;
+           return element;
+        }
+        return element
+      });
+      this.setState({data},
+          async () => {
+            await AsyncStorage.setItem('data', JSON.stringify(newData))
+          }
+        );
+console.log(newData);
+    // if(this.state.isToggleOn == true){
+    //   this.setState({isToggleOn: false})
+    // }else{
+    //   this.setState({isToggleOn: true})
+    // }
 
   }
    /**
@@ -132,18 +150,20 @@ export default class Cards extends React.Component {
         appearance='ghost'
         status='basic'
         accessoryLeft={MessageCircleIcon}>
-        1234567
+        {item.comments.length}
       </Button>
 
+   
       <Button
-        onPress={this.onLike}
+        onPress={() => this.onLike(item)}
         style={styles.iconButton}
         appearance='ghost'
-        status={this.state.isToggleOn ? 'danger' : 'basic'}
+        status={item.likes ? 'danger' : 'basic'}
         accessoryLeft={HeartIcon} />
-    </View>
-  );
 
+    </View>
+    
+  );
   renderItemHeader = (item) => {
 
     return (

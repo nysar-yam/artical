@@ -11,6 +11,7 @@ export default class DetailScreen extends Component {
    * @param {navigation} param exstend navigation on property
    * 
    */
+  
   static navigationOptions = ({ navigation }) => ({
     title: 'Details',
   });
@@ -22,7 +23,7 @@ export default class DetailScreen extends Component {
       item: null,
     };
     this.state = { isToggleOn: true }
-    this.onLike = this.onLike.bind(this);
+    // this.onLike = this.onLike.bind(this);
   }
 
 
@@ -39,6 +40,7 @@ export default class DetailScreen extends Component {
     /**
      * loop data form json
      */
+
     let data = await AsyncStorage.getItem("data")
     if (data) {
       let data1 = JSON.parse(data);
@@ -47,15 +49,16 @@ export default class DetailScreen extends Component {
       /**
        * declear new object and push data to value
        */
-      let a_json = [];
+      let matchItem = null;
       data1.forEach(function (value, index) {
         if (value.id == item_id) {
-          a_json.push(value);
+          matchItem = value;
         }
       });
       //** edit on setState */
       this.setState({
-        data: a_json,
+        data,
+        item : matchItem
       })
     }
   }
@@ -65,9 +68,15 @@ export default class DetailScreen extends Component {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }));
+    // this.setState(prevState => ({
+    //   isToggleOn: !prevState.isToggleOn
+    // }));
+    if(this.state.isToggleOn == true){
+      this.setState({isToggleOn: false})
+    }else{
+      this.setState({isToggleOn: true})
+    }
+
 
   }
 
@@ -75,16 +84,19 @@ export default class DetailScreen extends Component {
     /*
       Navigate to CommentScreen and pass item as param
     */
-   this.props.navigation.navigate('Comment');
+    this.props.navigation.navigate('Comment',{
+      item: item,
+    });
   }
+  
 
   render() {
     /** 
      * access to object article
      */
     const item = this.state;
-    if (item.data != null) {
-      let article = item.data[0];
+    if (item.item != null) {
+      let article = item.item;
       return (
         <Layout style={styles.container}>
           <NavigationEvents
@@ -129,7 +141,7 @@ export default class DetailScreen extends Component {
               </Text>
             </View>
             <Button
-               onPress= {this.onComment}
+               onPress= {() => this.onComment(item.item)}
               style={styles.iconButton}
               appearance='ghost'
               status='basic'
