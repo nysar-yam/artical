@@ -4,6 +4,7 @@ import { Avatar, Button, Layout, Text, Divider } from '@ui-kitten/components';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
 import { HeartIcon, MessageCircleIcon } from '../icons';
+import { Ellipse } from 'react-native-svg';
 
 export default class DetailScreen extends Component {
   /**
@@ -22,8 +23,6 @@ export default class DetailScreen extends Component {
       data: null,
       item: null,
     };
-    this.state = { isToggleOn: true }
-    // this.onLike = this.onLike.bind(this);
   }
 
 
@@ -43,11 +42,13 @@ export default class DetailScreen extends Component {
 
     let data = await AsyncStorage.getItem("data")
     if (data) {
+      // convert data for json to object
       let data1 = JSON.parse(data);
+      // get Id form navigation
       let item_id = this.props.navigation.state.params.id;
       console.log(item_id);
       /**
-       * declear new object and push data to value
+       * check data the same it or not
        */
       let matchItem = null;
       data1.forEach(function (value, index) {
@@ -55,29 +56,41 @@ export default class DetailScreen extends Component {
           matchItem = value;
         }
       });
-      //** edit on setState */
+      /**
+       * set Item to matchItem
+       */
       this.setState({
-        data,
+        data: data1,
         item : matchItem
       })
     }
   }
 
   // like and dislike on icon heart
-  onLike = (item) => {
+  onLike = async (item) => {
     /*
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
-    // this.setState(prevState => ({
-    //   isToggleOn: !prevState.isToggleOn
-    // }));
-    if(this.state.isToggleOn == true){
-      this.setState({isToggleOn: false})
-    }else{
-      this.setState({isToggleOn: true})
-    }
+console.log(item);
+    const {data} = this.state;
+    console.log(data);
+      let newData = data.map((element, index) => {
+        if(element.id === item.id){
+           element.likes = !element.likes;
+           return element;
+        }
+        return element
+        
+      });
+      console.log(newData);
+      
+      this.setState({data:newData},
+        async () => {
+          await AsyncStorage.setItem('data', JSON.stringify(newData))
+        }
+        );
 
-
+     
   }
 
   onComment = (item) => {
@@ -87,6 +100,7 @@ export default class DetailScreen extends Component {
     this.props.navigation.navigate('Comment',{
       item: item,
     });
+
   }
   
 
@@ -146,13 +160,13 @@ export default class DetailScreen extends Component {
               appearance='ghost'
               status='basic'
               accessoryLeft={MessageCircleIcon}>
-              0
+              
                 </Button>
             <Button
-              onPress={this.onLike}
+              onPress={() => this.onLike(item.item)}
               style={styles.iconButton}
               appearance='ghost'
-              status={this.state.isToggleOn ? 'danger' : 'basic'}
+              status={item.item.likes? 'danger' : 'basic'}
               accessoryLeft={HeartIcon} />
           </View>
         </Layout>

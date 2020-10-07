@@ -17,10 +17,6 @@ export default class Cards extends React.Component {
     this.state = {
       data: null,
     };
-    this.state = { isToggleOn: true }
-    // this.onLike = this.onLike.bind(this);
-    // console.log(likes);
-
   }
 
   componentDidMount() {
@@ -58,8 +54,6 @@ export default class Cards extends React.Component {
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
    const {data} = this.state;
-
-  //  let data = await AsyncStorage.setItem("data")
       let newData = data.map((element, index) => {
         if(element.id === item.id){
            element.likes = !element.likes;
@@ -67,18 +61,15 @@ export default class Cards extends React.Component {
         }
         return element
       });
+      /**
+       *  To store data into async storage
+          stringify to convert data object to json
+       */
       this.setState({data},
           async () => {
             await AsyncStorage.setItem('data', JSON.stringify(newData))
           }
         );
-console.log(newData);
-    // if(this.state.isToggleOn == true){
-    //   this.setState({isToggleOn: false})
-    // }else{
-    //   this.setState({isToggleOn: true})
-    // }
-
   }
    /**
     * Link to page comment
