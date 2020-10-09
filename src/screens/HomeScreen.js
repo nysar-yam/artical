@@ -67,7 +67,7 @@ export default class Cards extends React.Component {
        */
       this.setState({data},
           async () => {
-            await AsyncStorage.setItem('data', JSON.stringify(newData))
+            await AsyncStorage.setItem('data', JSON.stringify(newData));
           }
         );
   }
@@ -76,10 +76,13 @@ export default class Cards extends React.Component {
     * @param {item} item 
     */
   onComment = (item) => {
+    console.log(item);
     /*
       Navigate to CommentScreen and pass item as param
     */
-    this.props.navigation.navigate('Comment');
+      this.props.navigation.navigate('Comment',{
+        item:item,
+      });
   }
 
   render() {
@@ -136,14 +139,13 @@ export default class Cards extends React.Component {
       </View>
       {/* link to page comment */}
       <Button
-       onPress= {this.onComment}
+       onPress= {() => this.onComment(item)}
         style={styles.iconButton}
         appearance='ghost'
         status='basic'
         accessoryLeft={MessageCircleIcon}>
         {item.comments.length}
       </Button>
-
    
       <Button
         onPress={() => this.onLike(item)}

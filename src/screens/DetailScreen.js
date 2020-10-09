@@ -25,7 +25,9 @@ export default class DetailScreen extends Component {
     };
   }
 
-
+  /**
+   * End Reander and then it will call to function fetchData 
+   */
   async componentDidMount() {
     this.fetchData()
   }
@@ -72,6 +74,7 @@ export default class DetailScreen extends Component {
       Toggle likes button when user press on it and also update asyncStorage to keep data refreshing
     */
 console.log(item);
+
     const {data} = this.state;
     console.log(data);
       let newData = data.map((element, index) => {
@@ -160,7 +163,7 @@ console.log(item);
               appearance='ghost'
               status='basic'
               accessoryLeft={MessageCircleIcon}>
-              
+                 {item.item.comments.length}
                 </Button>
             <Button
               onPress={() => this.onLike(item.item)}
